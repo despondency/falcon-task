@@ -1,32 +1,39 @@
 server:
-  port: 8091
+  port: 8090
 
 spring:
   jpa:
     database: POSTGRESQL
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
   datasource:
     platform: postgres
     url: jdbc:postgresql://127.0.0.1:5432/postgres
     username: postgres
     password: root
     driverClassName: org.postgresql.Driver
-
   kafka:
-    consumer:
-      bootstrap-servers: 127.0.0.1:9092
-      client-id: message-service
-      group-id: falcon-task
-      enable-auto-commit: true
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
     producer:
       acks: 1
       client-id: message-service
-      value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       bootstrap-servers: 127.0.0.1:9092
     bootstrap-servers: 127.0.0.1:9092
   redis:
     host: localhost
+    port: 6379
+---
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
+  kafka:
+    consumer:
+      bootstrap-servers: fast-dev:9092
+    producer:
+      bootstrap-servers: fast-dev:9092
+    bootstrap-servers: fast-dev:9092
+  redis:
+    host: redis
     port: 6379

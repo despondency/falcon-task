@@ -5,7 +5,7 @@ $("#greetings").html("");
 
 function connect() {
 
-  socket = new SockJS('http://localhost:8095/socket/message-stream');
+  socket = new SockJS('http://localhost/socket/message-stream');
 
   socket.onheartbeat = function() {
     console.log("heartbeat");
@@ -14,7 +14,7 @@ function connect() {
   stompClient = Stomp.over(self.socket);
   stompClient.connect({}, function(frame) {
     console.log("Connected: " + frame);
-    stompClient.subscribe('/user/topic/message', function (message) {
+    stompClient.subscribe('/topic/message', function (message) {
       showMessage(JSON.parse(message.body).message);
     });
   });
