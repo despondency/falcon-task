@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "relay.host",
+      "type": "java.lang.String",
+      "description": "Broker relay host"
+    }
+  ] }

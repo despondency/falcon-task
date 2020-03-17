@@ -1,6 +1,6 @@
 package io.falcon.config;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -8,7 +8,6 @@ import org.springframework.session.Session;
 import org.springframework.session.web.socket.config.annotation.AbstractSessionWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.server.jetty.JettyRequestUpgradeStrategy;
 import org.springframework.web.socket.server.standard.TomcatRequestUpgradeStrategy;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
@@ -16,6 +15,9 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 @EnableScheduling
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractSessionWebSocketMessageBrokerConfigurer<Session> {
+
+  @Value("${relay.host}")
+  private String relayHost;
 
   @Override
   public void configureStompEndpoints(StompEndpointRegistry registry) {
@@ -27,7 +29,7 @@ public class WebSocketConfig extends AbstractSessionWebSocketMessageBrokerConfig
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.enableStompBrokerRelay("/queue/", "/topic/").setRelayHost("rabbitmq");
+    registry.enableStompBrokerRelay("/queue/", "/topic/").setRelayHost(relayHost);
     registry.setApplicationDestinationPrefixes("/app");
 
   }

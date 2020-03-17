@@ -6,7 +6,7 @@
 ##### How to start application:
 
 ```text
-1. docker-compose up
+1. docker-compose -f docker-compose.yml up
 2. Await for containers to get up
 3. Go to localhost in browser
 4. Login with user:password

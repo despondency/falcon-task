@@ -139,6 +139,13 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>2.2.5.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -148,11 +155,121 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M4</version>
+				<configuration>
+					<includes>
+						<include>**/**IntegrationTest.java</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M4</version>
+				<configuration>
+
+					<includes>
+						<include>**/**UnitTest.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
 
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<executions>
+					<execution>
+						<id>prepare-containers</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<showLogs>true</showLogs>
+							<images>
+								<image>
+									<name>lensesio/fast-data-dev:latest</name>
+									<alias>fast-dev</alias>
+									<run>
+										<ports>
+											<port>2181:2181</port>
+											<port>3030:3030</port>
+											<port>8081:8081</port>
+											<port>8082:8082</port>
+											<port>8083:8083</port>
+											<port>9581:9581</port>
+											<port>9582:9582</port>
+											<port>9583:9583</port>
+											<port>9584:9584</port>
+											<port>9585:9585</port>
+											<port>9092:9092</port>
+										</ports>
+										<env>
+											<ADV_HOST>127.0.0.1</ADV_HOST>
+										</env>
+									</run>
+								</image>
+
+								<image>
+									<name>postgres</name>
+									<alias>postgres</alias>
+									<run>
+										<ports>
+											<port>5432:5432</port>
+										</ports>
+										<env>
+											<POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
+										</env>
+									</run>
+								</image>
+
+
+								<image>
+									<name>redis</name>
+									<alias>redis</alias>
+									<run>
+										<ports>
+											<port>6379:6379</port>
+										</ports>
+									</run>
+								</image>
+
+								<image>
+									<name>jorgeacetozi/rabbitmq-stomp:3.6</name>
+									<alias>rabbitmq</alias>
+									<run>
+										<ports>
+											<port>5672:5672</port>
+											<port>15672:15672</port>
+											<port>61613:61613</port>
+										</ports>
+									</run>
+								</image>
+
+							</images>
+						</configuration>
+					</execution>
+					<execution>
+						<id>remove-containers</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+
 					<execution>
 						<id>build-image</id>
 						<goals>
