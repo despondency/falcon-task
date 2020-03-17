@@ -15,7 +15,7 @@ public class KafkaMessageListener {
 
   private final MessageRepository messageRepository;
 
-  @KafkaListener(topics = "messages")
+  @KafkaListener(id = "message_listener_1", topics = "messages")
   public void messageListener(@Payload Message message) {
     log.debug("Received message {} and will persist it to db", message);
     messageRepository.save(message);
