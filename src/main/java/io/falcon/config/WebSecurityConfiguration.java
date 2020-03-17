@@ -20,7 +20,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     http.csrf().disable().authorizeRequests()
       //  .antMatchers("/resources/**").permitAll()
-        .antMatchers("/", "/v1/api/message").hasRole("USER")
+        .antMatchers("/", "/v1/api", "/message-receiver/**").hasRole("USER")
         .antMatchers("/message-stream/**").hasRole("USER")
         .anyRequest().authenticated()
         .and().formLogin()
