@@ -41,7 +41,7 @@ public class MessageControllerIntegrationTest {
     private MessageService messageService;
 
     @Test
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = "USER")
     public void testGetAll() throws Exception {
         List<Message> ans = new ArrayList<>();
         Message message = new Message(1L, "message");
@@ -54,7 +54,7 @@ public class MessageControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = "USER")
     public void testCreateMessage() throws Exception {
         Message message = new Message(null, "message");
         Mockito.doNothing().when(messageService).pushToKafka(message);

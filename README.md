@@ -2,6 +2,12 @@
 
 ##### Requirements:
     Java 11, Docker, Docker compose
+    
+##### Run tests:
+
+```shell script
+mvn clean verify
+```
 
 ##### How to start application:
 

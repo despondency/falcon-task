@@ -22,7 +22,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/", "/v1/api", "/message-receiver/**").hasRole("USER")
         .antMatchers("/message-stream/**").hasRole("USER")
         .anyRequest().authenticated()
-        .and().formLogin()
+        .and()
+            .httpBasic()
+            .and()
+            .formLogin()
         .permitAll();
   }
 
@@ -31,6 +34,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //    return new BCryptPasswordEncoder();
 //  }
 
+
+  // this is of course for the sake of the example, in prod you wont hardcode user/pass, or use default encoder
   @Bean
   public UserDetailsService userDetailsService() {
     InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
