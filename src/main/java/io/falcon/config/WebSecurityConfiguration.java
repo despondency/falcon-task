@@ -23,8 +23,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/message-stream/**").hasRole("USER")
         .anyRequest().authenticated()
         .and()
-            .httpBasic()
-            .and()
             .formLogin()
         .permitAll();
   }
